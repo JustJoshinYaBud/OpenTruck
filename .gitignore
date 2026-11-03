@@ -1,0 +1,41 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+
+# --- Build outputs ---
+# Keep ALL build output out of the repo, including the installer. Committing a
+# 70 MB binary on every build grew .git to 2.75 GB (each build stored a fresh
+# blob that binaries cannot delta). The installer is a RELEASE artefact: build
+# it with build.bat and attach it to a tagged GitHub Release instead. The file
+# still appears on disk in dist\ after every build - it is simply not tracked.
+/dist/
+/build/
+/specfiles/
+*.spec
+
+# --- Downloaded prerequisites ---
+# vc_redist.x64.exe (~24 MB) is committed so offline builds/releases need no
+# re-download; build.bat only re-downloads it when the file is missing.
+# (deliberately NOT ignored)
+
+# --- Runtime artifacts: raw captures & logs, generated while connected ---
+*.log
+*.csv
+# ...but keep the bundled replay fixture:
+!sample.log
+
+# --- Internal handoff notes (kept local, not published) ---
+/internal/
+/AGENTS.md
+
+# --- Generated at build time by make_release_notes.py from CHANGELOG.md;
+# shipped inside the installer for the once-per-update popup ---
+/releasenotes.py
+
+# --- OS / editor cruft ---
+
+Thumbs.db
+.DS_Store
+.idea/
+.vscode/
+*.swp
