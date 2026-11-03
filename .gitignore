@@ -1,0 +1,59 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+
+# --- Build outputs ---
+# Keep ALL build output out of the repo, including the installer. Committing a
+# 70 MB binary on every build grew .git to 2.75 GB (each build stored a fresh
+# blob that binaries cannot delta). The installer is a RELEASE artefact: build
+# it with build.bat and attach it to a tagged GitHub Release instead. The file
+# still appears on disk in dist\ after every build - it is simply not tracked.
+/dist/
+/build/
+/specfiles/
+*.spec
+
+# --- Downloaded prerequisites ---
+# vc_redist.x64.exe (~24 MB) is committed so offline builds/releases need no
+# re-download; build.bat only re-downloads it when the file is missing.
+# (deliberately NOT ignored)
+
+# --- Runtime artifacts: raw captures & logs, generated while connected ---
+*.log
+*.csv
+# ...but keep the bundled replay fixture:
+!sample.log
+
+# --- Local reference download folder (OEM docs we pull for research).
+# Kept local + git-ignored: bulky, mostly copyrighted OEM material, never
+# published and never bundled. Parse here with local python; only small
+# cooked results go back into the conversation. ---
+/reference_docs/
+
+# --- Internal handoff notes (kept local, not published) ---
+/internal/
+/AGENTS.md
+# ROADMAP.md is a working roadmap, not a public doc (owner decision
+# 2026-11-16). Kept local + untracked; sync_public.py will not copy it.
+/ROADMAP.md
+
+# --- Private research/dev instruments (kept local, not published) ---
+# One-off bus-capture / probe / sweep tools used for research. They are NOT
+# part of the shipped app (deliberately absent from the exe) and must never
+# reach the public repo, so they are git-ignored + untracked. sync_public.py
+# only copies git-tracked files, so they stay private. They live in the
+# probes/ folder; each adds the repo root to sys.path itself, so they run
+# from anywhere: python probes/can2_probe.py (etc).
+/probes/
+
+# --- Generated at build time by make_release_notes.py from CHANGELOG.md;
+# shipped inside the installer for the once-per-update popup ---
+/releasenotes.py
+
+# --- OS / editor cruft ---
+
+Thumbs.db
+.DS_Store
+.idea/
+.vscode/
+*.swp
