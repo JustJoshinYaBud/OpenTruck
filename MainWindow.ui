@@ -1,0 +1,412 @@
+<ui version="4.0">
+  <class>MainWindow</class>
+  <widget class="QMainWindow" name="MainWindow">
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1200</width>
+        <height>760</height>
+      </rect>
+    </property>
+    <property name="windowTitle">
+      <string>OpenTruck</string>
+    </property>
+    <widget class="QWidget" name="centralwidget">
+      <layout name="rootLayout" class="QVBoxLayout">
+        <item>
+          <widget class="QSplitter" name="mainSplitter">
+            <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="handleWidth">
+              <number>8</number>
+            </property>
+            <property name="childrenCollapsible">
+              <bool>false</bool>
+            </property>
+            <widget class="QFrame" name="leftPanel">
+              <property name="minimumSize">
+                <size>
+                  <width>260</width>
+                  <height>0</height>
+                </size>
+              </property>
+              <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+              </property>
+              <layout class="QVBoxLayout" name="leftLayout">
+                <item>
+                  <widget class="QGroupBox" name="vehicleGroupBox">
+                    <property name="title">
+                      <string>Vehicle</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="vehicleLayout">
+                      <item>
+                        <widget class="QLabel" name="lblConnStatus">
+                          <property name="text">
+                            <string>Not connected</string>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QLabel" name="lblVin">
+                          <property name="text">
+                            <string>VIN: —</string>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QLabel" name="lblModel">
+                          <property name="text">
+                            <string>Make / Model: —</string>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QLabel" name="lblEngSerial">
+                          <property name="text">
+                            <string>Engine Serial No: —</string>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QLabel" name="lblSoftwareId">
+                          <property name="text">
+                            <string>Software ID: —</string>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <widget class="QLabel" name="lblEcuId">
+                          <property name="text">
+                            <string>ECU ID: —</string>
+                          </property>
+                        </widget>
+                      </item>
+                      <item>
+                        <layout class="QHBoxLayout" name="ledLayout">
+                          <item>
+                            <widget class="QLabel" name="ledJ1708">
+                              <property name="text">
+                                <string>● J1708</string>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QLabel" name="ledJ1939">
+                              <property name="text">
+                                <string>● J1939</string>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <spacer name="horizontalSpacer">
+                              <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                                <size>
+                                  <width>40</width>
+                                  <height>20</height>
+                                </size>
+                              </property>
+                            </spacer>
+                          </item>
+                        </layout>
+                      </item>
+                      <item>
+                        <layout class="QHBoxLayout" name="lampLayout">
+                          <item>
+                            <widget class="QLabel" name="lampAmber">
+                              <property name="text">
+                                <string>MIL</string>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QLabel" name="lampRed">
+                              <property name="text">
+                                <string>STOP</string>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <spacer name="lampSpacer">
+                              <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                                <size>
+                                  <width>20</width>
+                                  <height>20</height>
+                                </size>
+                              </property>
+                            </spacer>
+                          </item>
+                        </layout>
+                      </item>
+                      <item>
+                        <layout class="QHBoxLayout" name="lampLayout2">
+                          <item>
+                            <widget class="QLabel" name="lampAbs">
+                              <property name="text">
+                                <string>ABS</string>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <widget class="QLabel" name="lampTrailerAbs">
+                              <property name="text">
+                                <string>TRL ABS</string>
+                              </property>
+                            </widget>
+                          </item>
+                          <item>
+                            <spacer name="lampSpacer2">
+                              <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                                <size>
+                                  <width>20</width>
+                                  <height>20</height>
+                                </size>
+                              </property>
+                            </spacer>
+                          </item>
+                        </layout>
+                      </item>
+                    </layout>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QLabel" name="componentsLabel">
+                    <property name="text">
+                      <string>Components</string>
+                    </property>
+                  </widget>
+                </item>
+                <item>
+                  <widget class="QListWidget" name="componentList" />
+                </item>
+              </layout>
+            </widget>
+            <widget class="QFrame" name="centerPanel">
+              <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+              </property>
+              <layout class="QVBoxLayout" name="centerLayout">
+                <item>
+                  <widget class="QSplitter" name="faultLiveSplitter">
+                    <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="handleWidth">
+                      <number>8</number>
+                    </property>
+                    <property name="childrenCollapsible">
+                      <bool>false</bool>
+                    </property>
+                    <widget class="QWidget" name="faultTopPane">
+                      <layout name="faultTopLayout" class="QVBoxLayout">
+                        <item>
+                          <widget class="QLabel" name="faultCodesLabel">
+                            <property name="text">
+                              <string>Fault Codes</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item>
+                          <widget class="QTableWidget" name="codesTable" />
+                        </item>
+                        <item>
+                          <layout class="QHBoxLayout" name="faultButtonsLayout">
+                            <item>
+                              <widget class="QPushButton" name="btnConnect">
+                                <property name="text">
+                                  <string>Connect</string>
+                                </property>
+                              </widget>
+                            </item>
+                            <item>
+                              <widget class="QPushButton" name="btnClearFault">
+                                <property name="text">
+                                  <string>Clear Fault</string>
+                                </property>
+                              </widget>
+                            </item>
+                            <item>
+                              <widget class="QPushButton" name="btnClearAllFaults">
+                                <property name="text">
+                                  <string>Clear All Faults</string>
+                                </property>
+                              </widget>
+                            </item>
+                            <item>
+                              <spacer name="faultButtonsSpacer">
+                                <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                  <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                  </size>
+                                </property>
+                              </spacer>
+                            </item>
+                          </layout>
+                        </item>
+                      </layout>
+                    </widget>
+                    <widget class="QWidget" name="liveBottomPane">
+                      <layout name="liveBottomLayout" class="QVBoxLayout">
+                        <item>
+                          <widget class="QLabel" name="liveDataLabel">
+                            <property name="text">
+                              <string>Live Data</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item>
+                          <widget class="QSplitter" name="liveDataSplitter">
+                            <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="handleWidth">
+                              <number>8</number>
+                            </property>
+                            <property name="childrenCollapsible">
+                              <bool>false</bool>
+                            </property>
+                            <widget class="QTableWidget" name="liveDataTable" />
+                            <widget class="QWidget" name="liveGraphHost" />
+                          </widget>
+                        </item>
+                      </layout>
+                    </widget>
+                  </widget>
+                </item>
+              </layout>
+            </widget>
+          </widget>
+        </item>
+      </layout>
+    </widget>
+    <widget class="QMenuBar" name="menubar">
+      <property name="geometry">
+        <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>1200</width>
+          <height>21</height>
+        </rect>
+      </property>
+      <widget class="QMenu" name="menuFile">
+        <property name="title">
+          <string>File</string>
+        </property>
+        <addaction name="actionPreferences" />
+        <addaction name="actionExit" />
+      </widget>
+      <widget class="QMenu" name="menuConnection">
+        <property name="title">
+          <string>Connection</string>
+        </property>
+        <addaction name="actionConnect" />
+      </widget>
+      <widget class="QMenu" name="menuTools">
+        <property name="title">
+          <string>Tools</string>
+        </property>
+        <addaction name="actionStartLogging" />
+        <addaction name="actionTotalsCounters" />
+        <addaction name="actionAftertreatment" />
+        <addaction name="actionAbs" />
+        <addaction name="actionGenerateReport" />
+      </widget>
+      <widget class="QMenu" name="menuDeveloper">
+        <property name="title">
+          <string>Developer</string>
+        </property>
+        <addaction name="actionCapture" />
+      </widget>
+      <widget class="QMenu" name="menuHelp">
+        <property name="title">
+          <string>Help</string>
+        </property>
+        <addaction name="actionCheckForUpdates" />
+        <addaction name="actionAbout" />
+      </widget>
+      <addaction name="menuFile" />
+      <addaction name="menuConnection" />
+      <addaction name="menuTools" />
+      <addaction name="menuDeveloper" />
+      <addaction name="menuHelp" />
+    </widget>
+    <widget class="QStatusBar" name="statusbar" />
+    <action name="actionExit">
+      <property name="text">
+        <string>Exit</string>
+      </property>
+    </action>
+    <action name="actionConnect">
+      <property name="text">
+        <string>Connect</string>
+      </property>
+    </action>
+    <action name="actionStartLogging">
+      <property name="text">
+        <string>Start Logging...</string>
+      </property>
+    </action>
+    <action name="actionCapture">
+      <property name="text">
+        <string>Start Capture</string>
+      </property>
+    </action>
+    <action name="actionSniffBus">
+      <property name="text">
+        <string>Sniff Bus (raw)</string>
+      </property>
+    </action>
+    <action name="actionPreferences">
+      <property name="text">
+        <string>Preferences...</string>
+      </property>
+    </action>
+    <action name="actionGenerateReport">
+      <property name="text">
+        <string>Generate Report...</string>
+      </property>
+    </action>
+    <action name="actionTotalsCounters">
+      <property name="text">
+        <string>Totals and Counters...</string>
+      </property>
+    </action>
+    <action name="actionAftertreatment">
+      <property name="text">
+        <string>Aftertreatment...</string>
+      </property>
+    </action>
+    <action name="actionAbs">
+      <property name="text">
+        <string>ABS...</string>
+      </property>
+    </action>
+    <action name="actionCheckForUpdates">
+      <property name="text">
+        <string>Check for Updates...</string>
+      </property>
+    </action>
+    <action name="actionAbout">
+      <property name="text">
+        <string>About</string>
+      </property>
+    </action>
+  </widget>
+  <resources />
+  <connections />
+</ui>
