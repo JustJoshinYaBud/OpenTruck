@@ -1,0 +1,7 @@
+# OpenTruck sample replay log (<arbid_hex>:<data_hex> per line)
+# Engine (function 0, mfr 440) claims source address 0
+18EEFF00:0000003700000000
+# Transmission (function 3, mfr 7) claims source address 3
+18EEFF03:d007e00000030000
+# Engine DM1: MIL+red lamps (0x0C), one DTC SPN 110 (coolant temp) FMI 0
+18FECA00:0C006E000000

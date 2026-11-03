@@ -1,0 +1,14 @@
+# OpenTruck dependencies.
+#
+# Install on any build machine with:
+#     pip install -r requirements.txt
+#
+# PyInstaller is a BUILD-time dependency and MUST be present for build.bat.
+# If it is missing, build.bat now aborts safely (leaving dist\ untouched) and
+# check_env.py reports it clearly. Keeping it in this file means a fresh
+# machine gets everything it needs with one command -- a previous build pass
+# failed precisely because PyInstaller was installed ad hoc and forgotten.
+
+PySide6>=6.5
+pyinstaller>=6.0
+reportlab>=4.0

@@ -1,0 +1,102 @@
+# SignPath Foundation onboarding (free code signing)
+
+OpenTruck qualifies for [SignPath Foundation](https://signpath.org/) free code
+signing: it is GPL-3.0-or-later, has no dual licensing and no proprietary
+components. This page records the steps to turn that on. It is a one-time,
+mostly-manual process; the automated pieces are the GitHub Actions workflow
+and the repository variables below.
+
+## Why this exists
+
+SignPath Foundation signs Windows binaries for free open-source projects with
+**its own** certificate (private key on an HSM, never on a developer's
+machine). The signed binaries carry SignPath Foundation as the publisher. This
+removes the "Unknown publisher" / Smart App Control block that unsigned builds
+hit, with no paid certificate and no private key in our build.
+
+## 1. Prerequisites (before applying)
+
+- The project has an **OSI license with no dual licensing** — done (GPL-3.0).
+- The project code signing policy is public — see [`CODE_SIGNING.md`](CODE_SIGNING.md),
+  linked from the home page (README).
+- Enable **multi-factor authentication (MFA)** on the GitHub account that
+  owns the repository, and on the SignPath account once created.
+- The update check is described and can be turned off in *Preferences >
+  Updates* (see the privacy section of `CODE_SIGNING.md`). Done 2026-11-15.
+
+## 2. Apply (manual — repository owner)
+
+1. Open **https://signpath.org/apply** and fill in the application form:
+   - **Project / repository URL:** `https://github.com/JustJoshinYaBud/OpenTruck`
+   - **License:** GNU GPL v3.0-or-later (`LICENSE`)
+   - **Download / release URL:** `https://github.com/JustJoshinYaBud/OpenTruck/releases`
+   - **Code signing policy URL:** `https://github.com/JustJoshinYaBud/OpenTruck/blob/main/CODE_SIGNING.md`
+   - **Description:** what OpenTruck is, what it signs (the app exe, the
+     32-bit bridge exe, and the Inno installer), and that all artefacts are
+     built from source on GitHub-hosted GitHub Actions Windows runners.
+   - **Maintainer name and contact email.**
+2. Answer reviewer follow-up e-mails. Review typically takes ~1–2 weeks.
+3. After approval, accept the **SignPath.io organization invitation**, sign in
+   at **app.signpath.io**, and turn on **MFA** there.
+4. **Install / authorize the SignPath GitHub App** for the repository when
+   prompted (SignPath uses it to trace each signing request to the workflow
+   run that built the artifact).
+
+## 3. Configure SignPath (after approval)
+
+In the SignPath.io web UI:
+
+1. Note the **Organization ID** (a GUID) under *Organization → Settings*.
+2. Create/open the **project** for OpenTruck and note its **project slug**.
+3. Connect the project to the **GitHub.com trusted build system** for this
+   repository.
+4. Add an **artifact configuration** for the Windows executables (in the
+   SignPath UI). The workflow and the final artifact-configuration XML are a
+   follow-on piece of work described in the GitHub Actions step below.
+5. Create a **signing policy** (e.g. slug `release-signing`) that:
+   - uses the SignPath Foundation release certificate,
+   - requires **manual approval** by a maintainer for every request,
+   - is restricted to tag builds (`refs/tags/v*`) so only release builds are
+     signed.
+6. Create a **CI user** (e.g. `github-actions`), give it the **Submitter**
+   role on that policy, and copy its **API token**.
+
+## 4. Add secrets/variables to the GitHub repository
+
+In `https://github.com/JustJoshinYaBud/OpenTruck/settings/secrets/actions`:
+
+| Kind | Name | Value |
+|---|---|---|
+| Secret | `SIGNPATH_API_TOKEN` | The CI user's API token (encrypted secret — never commit it) |
+| Variable | `SIGNPATH_ORGANIZATION_ID` | SignPath Organization ID (GUID) |
+| Variable | `SIGNPATH_PROJECT_SLUG` | Your project slug |
+| Variable | `SIGNPATH_SIGNING_POLICY_SLUG` | `release-signing` (or your slug) |
+
+The GitHub Actions workflow reads these; when they exist, a tag build submits
+a signing request and only verifies/publishes signed artifacts.
+
+## 5. First real release
+
+1. Push a signed-off tag `vX.Y.Z` (matching `version.py`).
+2. The release workflow builds from source, submits the executables for
+   signing, waits for **manual approval**, downloads the signed files,
+   verifies each signature with `Get-AuthenticodeSignature`, rebuilds the
+   installer around the already-signed executables, signs the installer, and
+   attaches everything (plus SHA-256 checksums) to the draft release.
+3. On a Windows PC, confirm: `Get-AuthenticodeSignature .\OpenTruckSetup-<v>.exe`
+   shows **Status = Valid** and publisher **SignPath Foundation**.
+4. Once the first signed release is verified, require signing so a missing
+   credential fails the build instead of silently shipping unsigned.
+
+## Notes / gotchas
+
+- **Manual approval per release:** every signing request has to be approved by
+  a maintainer in the SignPath UI (or via the approved submitter flow). This
+  is a deliberate safety control, not a bug.
+- **The Inno uninstaller** is generated by the setup at install time and so is
+  not individually signed; the container `OpenTruckSetup-<v>.exe` signature is
+  what Windows verifies. This differs from the old local-cert `build.bat`
+  path, which signed the uninstaller in the same pass.
+- Signing keys/certificates are **never** in this repository or on any
+  machine; only the API token (a secret) authorises signing requests, and
+  manual approval gates each one.
